@@ -36,8 +36,6 @@ input.addEventListener('input', () => {
   loadRecordings(input.value);
 });
 
-
-
 const formatTime = (seconds) => {
   const m = String(Math.floor(seconds / 60)).padStart(2, '0');
   const s = String(seconds % 60).padStart(2, '0');
@@ -53,7 +51,6 @@ const formatDate = (isoString) => {
   });
 };
 
-
 function downloadAudio(blob, fileName = 'recording.wav') {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
@@ -64,8 +61,6 @@ function downloadAudio(blob, fileName = 'recording.wav') {
   document.body.removeChild(a);
   URL.revokeObjectURL(url); 
 }
-
-
 
 const loadRecordings = (searchTerm = '') => {
   recordingsList.innerHTML = '';
@@ -96,6 +91,7 @@ const loadRecordings = (searchTerm = '') => {
     audio.className = 'recording-audio';
     audio.controls = true;
     audio.src = rec.dataUrl;
+    if (rec.mimeType) audio.type = rec.mimeType;
 
     const del = document.createElement('button');
     del.className = 'icon-button';
@@ -114,8 +110,15 @@ const loadRecordings = (searchTerm = '') => {
     download.className = 'icon-button';
     download.innerHTML = '<i class="fa-solid fa-arrow-down"></i>';
     download.onclick = () => {
-      const blob = new Blob([rec.dataUrl], { type: 'audio/wav' });
-      downloadAudio(blob, `${rec.name}.wav`);
+      const arr = rec.dataUrl.split(',');
+      const mime = rec.mimeType || 'audio/mp4';
+      const bstr = atob(arr[1]);
+      let n = bstr.length;
+      const u8arr = new Uint8Array(n);
+      while (n--) u8arr[n] = bstr.charCodeAt(n);
+      const blob = new Blob([u8arr], { type: mime });
+      const ext = mime.split('/')[1].replace('x-', '');
+      downloadAudio(blob, `${rec.name}.${ext}`);
     };
 
     const topSection = document.createElement('div');
@@ -213,7 +216,21 @@ recordButton.onclick = async () => {
     source.connect(analyser);
     drawWaveform(analyser, dataArray);
 
-    mediaRecorder = new MediaRecorder(stream);
+    // Select best mimeType for browser compatibility
+    let mimeType = '';
+    if (MediaRecorder.isTypeSupported('audio/mp4')) {
+      mimeType = 'audio/mp4';
+    } else if (MediaRecorder.isTypeSupported('audio/aac')) {
+      mimeType = 'audio/aac';
+    } else if (MediaRecorder.isTypeSupported('audio/webm')) {
+      mimeType = 'audio/webm';
+    } else {
+      mimeType = ''; 
+    }
+    mediaRecorder = mimeType 
+      ? new MediaRecorder(stream, { mimeType }) 
+      : new MediaRecorder(stream);
+
     startTime = Date.now();
 
     timerDisplay.innerHTML = '<i class="fa-solid fa-pause"></i> 00:00';
@@ -222,10 +239,11 @@ recordButton.onclick = async () => {
       timerDisplay.innerHTML = `<i class="fa-solid fa-pause"></i> ${formatTime(elapsed)}` || '<i class="fa-solid fa-play"></i> 00:00';
     }, 1000);
 
+    audioChunks = [];
     mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
     mediaRecorder.onstop = async () => {
       const durationInSeconds = Math.round((Date.now() - startTime) / 1000);
-      const blob = new Blob(audioChunks, { type: 'audio/wav' });
+      const blob = new Blob(audioChunks, { type: mediaRecorder.mimeType || mimeType || 'audio/mp4' });
 
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -234,7 +252,9 @@ recordButton.onclick = async () => {
         const newRecording = {
           name: fileName,
           duration: durationInSeconds,
-          dataUrl: base64data
+          dataUrl: base64data,
+          mimeType: blob.type,
+          timestamp: new Date().toISOString()
         };
 
         const recordings = JSON.parse(localStorage.getItem('recordings') || '[]');
@@ -258,7 +278,6 @@ recordButton.onclick = async () => {
     isRecording = false;
     recordButton.textContent = 'Start';
     timerDisplay.innerHTML = '<i class="fa-solid fa-play"></i> 00:00';
-
   }
 };
 
