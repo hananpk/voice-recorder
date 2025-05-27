@@ -1,0 +1,340 @@
+body {
+  font-family: sans-serif;
+  min-height: 100vh;
+  margin: 0;
+  background: #f8f9fa;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+
+::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  border-radius: 10px;
+}
+
+
+::-webkit-scrollbar-thumb {
+  background: #e3e3e3;
+  border-radius: 10px;
+}
+
+
+::-webkit-scrollbar-thumb:hover {
+  background: #aaaaaa;
+}
+
+
+main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+main #recordings {
+  padding: 50px 100px;
+  width: 40%;
+  margin: 0 auto;
+  height: 80vh;
+  overflow-y: auto;
+}
+
+main #recordings .search-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #EFEFF0;
+  padding: 10px 12px;
+  border-radius: 50px;
+  height: 50px;
+  margin-bottom: 40px;
+}
+
+main #recordings .search-box input {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: transparent;
+  padding-left: 16px;
+  font-size: 18px;
+}
+
+main #recordings .search-box span {
+  position: absolute;
+  color: #848488;
+  border: none;
+  background: transparent;
+  padding-left: 16px;
+  font-size: 18px;
+}
+
+main #recordings .search-box .search-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+main #recordings .search-box input:focus {
+  outline: none;
+}
+
+main #recordings .search-box button {
+  cursor: pointer;
+  background: #fff;
+  border: none;
+  font-size: 16px;
+  font-weight: semibold;
+  color: #000;
+  padding: 10px 20px;
+  border-radius: 50px;
+  width: 140px;
+  height: 100%;
+  transition: .3s ease-in-out;
+}
+
+main #recordings .search-box button i {
+  margin-right: 6px;
+}
+
+main #recordings .search-box button:hover {
+  background: #000000;
+  color: #fff;
+  width: 170px;
+
+}
+
+.recording-item {
+  padding: 20px 10px;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 24px;
+  border-bottom: 1px solid #ddd;
+}
+
+.recording-item:last-child {
+  border-bottom: none;
+}
+
+.recording-item .recording-meta,
+.recording-item .recording-title span {
+  color: #999999;
+  font-weight: normal;
+
+}
+
+.recording-item .recording-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 16px;
+  font-weight: bold;
+
+}
+
+.recording-item .recording-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.recording-item .recording-controls audio {
+  width: 80%;
+  height: 40px;
+  border-radius: 20px;
+  background: #f3f3f3;
+  outline: none;
+}
+
+.recording-item .recording-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-left: 18px;
+}
+
+.recording-item .recording-actions button {
+  background: #f3f3f3;
+  width: 40px;
+  height: 40px;
+  color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: background .3s ease-in-out;
+  transition: .3s ease-in-out;
+}
+
+.recording-item .recording-actions button:hover {
+  background: #000000;
+  color: #fff;
+}
+
+#record-controls {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  background: #fff;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  padding: 30px 20px 20px 20px;
+  width: 400px;
+  border-radius: 40px;
+  transition: .3s ease-in-out;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px, rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;
+}
+
+#record-controls.expanded {
+  width: 600px;
+  height: auto;
+  padding: 30px 20px;
+}
+
+#record-controls .expand {
+  cursor: pointer;
+  position: absolute;
+  top: -10%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fff;
+  color: #848488;
+  width: 12px;
+  height: 12px;
+  padding: 12px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: .3s ease-in-out;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px, rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;
+
+}
+
+#record-controls.expanded .expand {
+  left: 50%;
+  top: -20px;
+  transform: rotate(180deg) translateX(50%);
+}
+
+#record-controls .waveform-container {
+  position: relative;
+  margin-bottom: 10px;
+  width: 100%;
+  height: 60px;
+  transition: .3s ease-in-out;
+}
+
+#record-controls.expanded .waveform-container {
+  position: relative;
+  margin-bottom: 10px;
+  width: 100%;
+  height: 120px;
+}
+
+#record-controls .wave-container {
+  background: #ccc;
+  height: 100%;
+  width: 100%;
+  border-radius: 50px;
+}
+
+#record-controls .timer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 20px;
+  font-weight: semibold;
+  color: #000;
+
+}
+
+#record-controls button {
+  padding: 14px 10px;
+  background: #000;
+  font-size: 18px;
+  height: 60px;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+}
+
+#record-controls button:hover {
+  background: #333;
+}
+
+
+.no-results {
+  text-align: center;
+  font-size: 18px;
+  color: #999999;
+}
+
+
+/* Responsive screen */
+
+@media (max-width: 1200px) {
+  main #recordings {
+    width: 60%;
+    padding: 20px;
+  }
+
+}
+
+@media (max-width: 768px) {
+  main #recordings {
+    width: 80%;
+    padding: 20px;
+  }
+
+}
+
+@media (max-width: 580px) {
+  main #recordings {
+    width: 90%;
+    padding: 20px;
+  }
+
+  main #recordings .search-box input,
+  main #recordings .search-box span,
+  main #recordings .search-box button,
+  #record-controls button {
+    font-size: 16px;
+  }
+
+}
+@media (max-width: 480px) {
+  main #recordings .search-box button{
+    width: 160px;
+  }
+  #record-controls{
+    width: 80%;
+    margin: 0 auto;
+  }
+  #record-controls.expanded{
+    width: 90%;
+    height: auto;
+  }
+  .recording-item .recording-controls{
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .recording-item .recording-controls audio{
+    width: 100%;
+  }
+  .recording-item .recording-actions{
+    width: 100%;
+    justify-content: flex-end;
+    align-items: flex-end;
+    margin-top: 20px;
+  }
+}

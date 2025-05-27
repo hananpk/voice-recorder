@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Audio Recorder</title>
+  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script src="https://kit.fontawesome.com/0edb635d7a.js" crossorigin="anonymous"></script>
+  <script src="./script.js" defer></script>
+</head>
+
+<body>
+  <main>
+    <div id="recordings">
+      <div class="search-box">
+        <div class="search-wrapper">
+          <span id="search-label"><i class="fa-solid fa-magnifying-glass"></i> Search</span>
+          <input type="text" id="recordingName" />
+        </div>
+        <button id="ask-ai"><i class="fa-solid fa-head-side-virus"></i> Ask AI</button>
+      </div>
+      <div id="recordings-list">
+        <div class="recording-item">
+          <p class="recording-title">Recording Name (00:00)</p>
+          <audio controls></audio>
+          <button id="speed-toggle" class="speed-toggle">1x</button>
+          <button class="delete-button"></button>
+        </div>
+      </div>
+    </div>
+    <div id="record-controls">
+      <span class="expand"><i class="fa-solid fa-angle-up"></i></span>
+      <div class="waveform-container">
+        <canvas class="wave-container" id="waveform"></canvas>
+        <span class="timer"><i class="fa-solid fa-play"></i> 0:00</span>
+      </div>
+      <button id="record-button">Start</button>
+    </div>
+  </main>
+</body>
+
+</html>
