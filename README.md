@@ -12,7 +12,7 @@ It allows users to record their voice, save it with a custom name.
 -  **Delete Recordings:** Remove unwanted recordings from the list.
 -  **Search:** Filter and find recordings by name.
 
-## 🛠️ Technologies Used
+## Technologies Used
 
 - HTML5
 - CSS3
