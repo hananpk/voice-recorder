@@ -4,6 +4,8 @@ let isRecording = false;
 let animationId;
 let startTime;
 let timerInterval;
+let stream;
+
 
 const recordButton = document.getElementById('record-button');
 const timerDisplay = document.querySelector('.timer');
@@ -299,7 +301,6 @@ recordButton.onclick = async () => {
       return;
     }
 
-    let stream;
     try {
       stream = await navigator.mediaDevices.getUserMedia({ audio: true });
     } catch (err) {
@@ -392,6 +393,7 @@ recordButton.onclick = async () => {
     isRecording = false;
     recordButton.textContent = 'Start';
     timerDisplay.innerHTML = '<i class="fa-solid fa-play"></i> 00:00';
+    stream.getTracks().forEach(track => track.stop());
   }
 };
 
