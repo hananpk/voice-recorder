@@ -19,7 +19,7 @@ const recordControls = document.getElementById('record-controls');
 const askAi = document.getElementById('ask-ai');
 
 askAi.addEventListener('click', () => {
-  alert('AI is Coming.... Stay tuned for updates! 🙈');
+  alert('AI is Coming.... Stay tuned for update! 🙈');
 });
 expandBtn.addEventListener('click', () => {
   recordControls.classList.toggle('expanded');
@@ -70,7 +70,7 @@ const loadRecordings = (searchTerm = '') => {
   if (recordings.length === 0) {
     const noResult = document.createElement('div');
     noResult.className = 'no-results';
-    noResult.textContent = 'No recordings found.';
+    noResult.innerHTML = '<i class="fa-solid fa-microphone"></i> No recordings found.';
     recordingsList.appendChild(noResult);
     return;
   }
@@ -117,7 +117,8 @@ const loadRecordings = (searchTerm = '') => {
     progress.style.margin = '10px 0'; 
     progress.style.height = '5px'; 
     progress.style.borderRadius = '5px'; 
-    progress.style.background = '#e0e0e0';
+    progress.style.background = '#848488';
+    progress.style.outline = 'none';
     progress.style.cursor = 'pointer';
     progress.style.accentColor = '#000'; 
 
@@ -182,7 +183,7 @@ const loadRecordings = (searchTerm = '') => {
     player.appendChild(timeDisplay); 
 
     const del = document.createElement('button');
-    del.className = 'icon-button';
+    del.className = 'action-button delete-button';
     del.innerHTML = '<i class="fa-solid fa-trash"></i>';
     del.onclick = () => {
       const originalRecordings = JSON.parse(localStorage.getItem('recordings') || '[]');
@@ -196,8 +197,8 @@ const loadRecordings = (searchTerm = '') => {
     };
 
     const download = document.createElement('button');
-    download.className = 'icon-button';
-    download.innerHTML = '<i class="fa-solid fa-arrow-down"></i>';
+    download.className = 'action-button';
+    download.innerHTML = '<i class="fa-solid fa-download"></i>';
     download.onclick = () => {
       const arr = rec.dataUrl.split(',');
       const mime = rec.mimeType || 'audio/mp4'; 
@@ -206,8 +207,7 @@ const loadRecordings = (searchTerm = '') => {
       const u8arr = new Uint8Array(n);
       while (n--) u8arr[n] = bstr.charCodeAt(n);
       const blob = new Blob([u8arr], { type: mime });
-      const ext = mime.split('/')[1].replace('x-', ''); 
-      downloadAudio(blob, `${rec.name}.${ext}`);
+      downloadAudio(blob, `${rec.name}.mp3`);
     };
 
     const topSection = document.createElement('div');
@@ -223,7 +223,7 @@ const loadRecordings = (searchTerm = '') => {
     const actions = document.createElement('div');
     actions.className = 'recording-actions';
     const speedBtn = document.createElement('button');
-    speedBtn.className = 'icon-button speed-toggle';
+    speedBtn.className = 'action-button speed-toggle';
     speedBtn.textContent = '1x';
 
     let localSpeed = 1;
