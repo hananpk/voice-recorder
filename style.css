@@ -36,7 +36,7 @@ main {
 
 main #recordings {
   padding: 50px 100px;
-  width: 40%;
+  width: 50%;
   margin: 0 auto;
   height: 80vh;
   overflow-y: auto;
@@ -105,7 +105,9 @@ main #recordings .search-box button:hover {
   width: 170px;
 
 }
-
+#recordings-list{
+  padding-bottom: 150px;
+}
 .recording-item {
   padding: 20px 10px;
   display: flex;
@@ -113,6 +115,42 @@ main #recordings .search-box button:hover {
   margin-bottom: 24px;
   border-bottom: 1px solid #ddd;
 }
+
+.recording-item .custom-player {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: #f3f3f3;
+  padding: 12px 20px;
+  border-radius: 50px;
+  box-sizing: border-box;
+}
+.recording-item .custom-player .custom-player-wrapper{
+  display: flex;
+  width: 100%;
+  align-items: center;
+}
+.recording-item .custom-player .time-display{
+  width: 160px;
+  text-align: right;
+}
+
+.recording-item .icon-button {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: none;
+  background: none;
+  color: #000;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 12px;
+}
+
 
 .recording-item:last-child {
   border-bottom: none;
@@ -298,6 +336,22 @@ main #recordings .search-box button:hover {
 
 }
 
+@media (max-width: 650px) {
+  .recording-item .recording-controls {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .recording-item .recording-controls audio {
+    width: 100%;
+  }
+
+  .recording-item .recording-actions {
+    width: 100%;
+    justify-content: flex-end;
+    align-items: flex-end;
+    margin-top: 20px;
+  }
+}
 @media (max-width: 580px) {
   main #recordings {
     width: 90%;
@@ -312,29 +366,21 @@ main #recordings .search-box button:hover {
   }
 
 }
+
 @media (max-width: 480px) {
-  main #recordings .search-box button{
+  main #recordings .search-box button {
     width: 160px;
   }
-  #record-controls{
+
+  #record-controls {
     width: 80%;
     margin: 0 auto;
   }
-  #record-controls.expanded{
+
+  #record-controls.expanded {
     width: 90%;
     height: auto;
   }
-  .recording-item .recording-controls{
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  .recording-item .recording-controls audio{
-    width: 100%;
-  }
-  .recording-item .recording-actions{
-    width: 100%;
-    justify-content: flex-end;
-    align-items: flex-end;
-    margin-top: 20px;
-  }
+
 }
+

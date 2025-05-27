@@ -4,7 +4,6 @@ let isRecording = false;
 let animationId;
 let startTime;
 let timerInterval;
-let currentSpeed = 1;
 
 const recordButton = document.getElementById('record-button');
 const timerDisplay = document.querySelector('.timer');
@@ -16,7 +15,6 @@ const label = document.getElementById('search-label');
 const expandBtn = document.querySelector('.expand');
 const recordControls = document.getElementById('record-controls');
 const askAi = document.getElementById('ask-ai');
-const speedToggleBtn = document.getElementById('speed-toggle');
 
 askAi.addEventListener('click', () => {
   alert('AI is Coming.... Stay tuned for updates! 🙈');
@@ -59,7 +57,7 @@ function downloadAudio(blob, fileName = 'recording.wav') {
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
-  URL.revokeObjectURL(url); 
+  URL.revokeObjectURL(url);
 }
 
 const loadRecordings = (searchTerm = '') => {
@@ -67,15 +65,15 @@ const loadRecordings = (searchTerm = '') => {
   const recordings = JSON.parse(localStorage.getItem('recordings') || '[]')
     .reverse()
     .filter(rec => rec.name.toLowerCase().includes(searchTerm.toLowerCase()));
-    if (recordings.length === 0) {
-      const noResult = document.createElement('div');
-      noResult.className = 'no-results';
-      noResult.textContent = 'No recordings found.';
-      recordingsList.appendChild(noResult);
-      return;
-    }
+  if (recordings.length === 0) {
+    const noResult = document.createElement('div');
+    noResult.className = 'no-results';
+    noResult.textContent = 'No recordings found.';
+    recordingsList.appendChild(noResult);
+    return;
+  }
 
-  recordings.forEach((rec, index) => {
+  recordings.forEach((rec) => { 
     const container = document.createElement('div');
     container.className = 'recording-item';
 
@@ -87,11 +85,99 @@ const loadRecordings = (searchTerm = '') => {
     title.className = 'recording-title';
     title.innerHTML = `${rec.name} <span class="recording-duration">(${formatTime(rec.duration)})</span>`;
 
-    const audio = document.createElement('audio');
-    audio.className = 'recording-audio';
-    audio.controls = true;
-    audio.src = rec.dataUrl;
-    if (rec.mimeType) audio.type = rec.mimeType;
+    const howler = new Howl({
+      src: [rec.dataUrl],
+      format: ['mp3', 'aac', 'webm'], 
+      html5: true, 
+      preload: true,
+    });
+
+    let isPlaying = false;
+
+    
+    const player = document.createElement('div');
+    player.className = 'custom-player';
+
+    const playerWrapper = document.createElement('div');
+    playerWrapper.className = 'custom-player-wrapper';
+    
+    const playBtn = document.createElement('button');
+    playBtn.className = 'icon-button play-button';
+    playBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
+
+    const progress = document.createElement('input');
+    progress.type = 'range';
+    progress.min = 0;
+    progress.max = 100;
+    progress.value = 0;
+    progress.className = 'progress-bar progress-slider';
+    progress.style.width = '100%'; 
+    progress.style.margin = '10px 0'; 
+    progress.style.height = '5px'; 
+    progress.style.borderRadius = '5px'; 
+    progress.style.background = '#e0e0e0';
+    progress.style.cursor = 'pointer';
+    progress.style.accentColor = '#000'; 
+
+    const timeDisplay = document.createElement('span');
+    timeDisplay.className = 'time-display';
+    howler.on('load', () => {
+        timeDisplay.textContent = `00:00 / ${formatTime(rec.duration)}`;
+    });
+    if (howler.state() === 'loaded') {
+        timeDisplay.textContent = `00:00 / ${formatTime(rec.duration)}`;
+    }
+
+
+    let progressInterval;
+
+    playBtn.onclick = () => {
+      if (isPlaying) {
+        howler.pause();
+        playBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
+        clearInterval(progressInterval);
+      } else {
+        howler.play();
+        playBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
+        progressInterval = setInterval(() => {
+          const seekTime = howler.seek();
+          const duration = howler.duration();
+          const percentage = (isNaN(duration) || duration === 0) ? 0 : (seekTime / duration) * 100;
+          progress.value = percentage;
+          timeDisplay.textContent = `${formatTime(Math.floor(seekTime))} / ${formatTime(rec.duration)}`;
+        }, 200); 
+      }
+      isPlaying = !isPlaying;
+    };
+
+    progress.addEventListener('input', () => {
+      const duration = howler.duration();
+      if (isNaN(duration) || !isFinite(duration) || duration === 0) return;
+
+      const seekTime = (progress.value / 100) * duration;
+      howler.seek(seekTime);
+      timeDisplay.textContent = `${formatTime(Math.floor(seekTime))} / ${formatTime(rec.duration)}`;
+    });
+
+
+    howler.on('end', () => { 
+      playBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
+      isPlaying = false;
+      clearInterval(progressInterval);
+      progress.value = 0;
+      timeDisplay.textContent = `00:00 / ${formatTime(rec.duration)}`; 
+    });
+
+    howler.on('play', () => {
+      if (timeDisplay.textContent === '00:00 / 00:00' && howler.duration()) {
+        timeDisplay.textContent = `00:00 / ${formatTime(rec.duration)}`;
+      }
+    });
+
+    playerWrapper.appendChild(playBtn);
+    playerWrapper.appendChild(progress);
+    player.appendChild(playerWrapper);
+    player.appendChild(timeDisplay); 
 
     const del = document.createElement('button');
     del.className = 'icon-button';
@@ -102,7 +188,8 @@ const loadRecordings = (searchTerm = '') => {
       if (originalIndex > -1) {
         originalRecordings.splice(originalIndex, 1);
         localStorage.setItem('recordings', JSON.stringify(originalRecordings));
-        loadRecordings(searchTerm); 
+        loadRecordings(searchTerm);
+        howler.unload(); // Unload howler instance to free up memory
       }
     };
 
@@ -111,13 +198,13 @@ const loadRecordings = (searchTerm = '') => {
     download.innerHTML = '<i class="fa-solid fa-arrow-down"></i>';
     download.onclick = () => {
       const arr = rec.dataUrl.split(',');
-      const mime = rec.mimeType || 'audio/mp4';
+      const mime = rec.mimeType || 'audio/mp4'; 
       const bstr = atob(arr[1]);
       let n = bstr.length;
       const u8arr = new Uint8Array(n);
       while (n--) u8arr[n] = bstr.charCodeAt(n);
       const blob = new Blob([u8arr], { type: mime });
-      const ext = mime.split('/')[1].replace('x-', '');
+      const ext = mime.split('/')[1].replace('x-', ''); 
       downloadAudio(blob, `${rec.name}.${ext}`);
     };
 
@@ -128,21 +215,22 @@ const loadRecordings = (searchTerm = '') => {
 
     const controls = document.createElement('div');
     controls.className = 'recording-controls';
-    controls.appendChild(audio);
+    controls.appendChild(player);
+
 
     const actions = document.createElement('div');
     actions.className = 'recording-actions';
     const speedBtn = document.createElement('button');
     speedBtn.className = 'icon-button speed-toggle';
     speedBtn.textContent = '1x';
-    
+
     let localSpeed = 1;
     speedBtn.addEventListener('click', () => {
       localSpeed = localSpeed === 1 ? 2 : 1;
-      audio.playbackRate = localSpeed;
+      howler.rate(localSpeed);
       speedBtn.textContent = `${localSpeed}x`;
     });
-    
+
     actions.appendChild(speedBtn);
     actions.appendChild(download);
     actions.appendChild(del);
@@ -205,8 +293,29 @@ const drawWaveform = (analyser, dataArray) => {
 
 recordButton.onclick = async () => {
   if (!isRecording) {
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    const audioContext = new AudioContext();
+    // Check for media devices
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      alert('Your browser does not support audio recording. Please try a different browser or update it.');
+      return;
+    }
+
+    let stream;
+    try {
+      stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    } catch (err) {
+      console.error('Error accessing microphone:', err);
+      if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
+        alert('Microphone access denied. Please allow microphone access in your browser settings to record audio.');
+      } else if (err.name === 'NotFoundError') {
+        alert('No microphone found. Please ensure a microphone is connected and enabled.');
+      } else {
+        alert('An error occurred while accessing the microphone: ' + err.message);
+      }
+      return;
+    }
+
+
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
     const source = audioContext.createMediaStreamSource(stream);
     const analyser = audioContext.createAnalyser();
     analyser.fftSize = 2048;
@@ -216,19 +325,24 @@ recordButton.onclick = async () => {
     source.connect(analyser);
     drawWaveform(analyser, dataArray);
 
-    // Select best mimeType for browser compatibility
+
     let mimeType = '';
     if (MediaRecorder.isTypeSupported('audio/mp4')) {
       mimeType = 'audio/mp4';
     } else if (MediaRecorder.isTypeSupported('audio/aac')) {
       mimeType = 'audio/aac';
+    } else if (MediaRecorder.isTypeSupported('audio/webm; codecs=opus')) { 
+      mimeType = 'audio/webm; codecs=opus';
     } else if (MediaRecorder.isTypeSupported('audio/webm')) {
       mimeType = 'audio/webm';
     } else {
-      mimeType = ''; 
+
+      console.warn('No specific audio MIME type supported, using browser default.');
+      mimeType = '';
     }
-    mediaRecorder = mimeType 
-      ? new MediaRecorder(stream, { mimeType }) 
+
+    mediaRecorder = mimeType
+      ? new MediaRecorder(stream, { mimeType })
       : new MediaRecorder(stream);
 
     startTime = Date.now();
@@ -260,10 +374,10 @@ recordButton.onclick = async () => {
         const recordings = JSON.parse(localStorage.getItem('recordings') || '[]');
         recordings.push(newRecording);
         localStorage.setItem('recordings', JSON.stringify(recordings));
-        loadRecordings();
+        loadRecordings(); 
       };
       reader.readAsDataURL(blob);
-      audioChunks = [];
+      audioChunks = []; 
     };
 
     mediaRecorder.start();
@@ -271,10 +385,10 @@ recordButton.onclick = async () => {
     isRecording = true;
   } else {
     mediaRecorder.stop();
-    cancelAnimationFrame(animationId);
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    clearInterval(timerInterval);
-    timerDisplay.textContent = '';
+    cancelAnimationFrame(animationId); 
+    ctx.clearRect(0, 0, canvas.width, canvas.height); 
+    clearInterval(timerInterval); 
+    timerDisplay.textContent = ''; 
     isRecording = false;
     recordButton.textContent = 'Start';
     timerDisplay.innerHTML = '<i class="fa-solid fa-play"></i> 00:00';
