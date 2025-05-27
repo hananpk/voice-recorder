@@ -225,7 +225,7 @@ recordButton.onclick = async () => {
     mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
     mediaRecorder.onstop = async () => {
       const durationInSeconds = Math.round((Date.now() - startTime) / 1000);
-      const blob = new Blob(audioChunks, { type: 'audio/webm' });
+      const blob = new Blob(audioChunks, { type: 'audio/wav' });
 
       const reader = new FileReader();
       reader.onloadend = () => {
