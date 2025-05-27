@@ -266,10 +266,10 @@ const drawWaveform = (analyser, dataArray) => {
       ? Math.min(boosted, maxAmplitude)
       : idleAmplitude;
 
-    currentAmplitude += (targetAmplitude - currentAmplitude) * 0.1;
+    currentAmplitude += (targetAmplitude - currentAmplitude) * 0.2;
 
     ctx.beginPath();
-    const frequency = 0.04;
+    const frequency = 0.06;
     const centerY = canvas.height / 2;
 
     ctx.moveTo(0, centerY);
