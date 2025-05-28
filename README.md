@@ -47,7 +47,7 @@ It allows users to record their voice, save it with a custom name.
    
    - When you stop a recording, the app will ask you to enter a custom file name via an alert prompt.
 
-   - If you leave the prompt empty or cancel it, the recording will be saved with a system-generated name like Recording_1, Recording_2, etc.
+   - If you leave the prompt empty or cancel it, the recording will be saved with a system-generated name.
 
    - This helps you keep recordings organized and easily searchable later.
 
