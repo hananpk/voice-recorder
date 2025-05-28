@@ -30,11 +30,13 @@ It allows users to record their voice, save it with a custom name.
    
 2. **Open index.html**
 3. 
-   - Double click on index.html or open index.html in live server
+   - Double click on index.html
+     
    OR
+   
    - Open it using Live Server in Visual Studio Code (Right-click → Open with Live Server)
 
-4. **Record & Explore Voice Recorder**
+5. **Record & Explore Voice Recorder**
 
    - Allow microphone access when prompted
 
