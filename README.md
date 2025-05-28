@@ -28,7 +28,7 @@ It allows users to record their voice, save it with a custom name.
    git clone https://github.com/your-username/voice-recorder.git
    cd voice-recorder
    
-2. **Open ```bash index.html**
+2. **Open index.html**
 3. 
    - Double click on index.html or open index.html in live server
    OR
