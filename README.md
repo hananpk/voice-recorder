@@ -18,6 +18,26 @@ It allows users to record their voice, save it with a custom name.
 - CSS3
 - JavaScript (Vanilla)
 - Web Audio API
-- Howler.js 
+- [Howler.js](https://howlerjs.com/)  
 - LocalStorage (for saving recording metadata)
+
+## Initial Setup
+
+1. **Clone or Download the Repository**
+   ```bash
+   git clone https://github.com/your-username/voice-recorder.git
+   cd voice-recorder
+   
+2. **Open index.html from voice-recorder**
+3. 
+   - Double click on index.html or open index.html in live server
+   OR
+   - Open it using Live Server in Visual Studio Code (Right-click → Open with Live Server)
+
+4. **Record & Explore Voice Recorder**
+
+   - Allow microphone access when prompted
+
+   - Start recording and try out all the features!
+
 
