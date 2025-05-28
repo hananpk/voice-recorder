@@ -1,3 +1,4 @@
+
 # Voice Recorder
 
 A simple, modern voice recorder built using **HTML**, **CSS**, **JavaScript**, and the **Web Audio API**.  
@@ -29,17 +30,26 @@ It allows users to record their voice, save it with a custom name.
    cd voice-recorder
    
 2. **Open index.html**
-3. 
+
    - Double click on index.html
      
    OR
    
    - Open it using Live Server in Visual Studio Code (Right-click → Open with Live Server)
 
-5. **Record & Explore Voice Recorder**
+3. **Record & Explore Voice Recorder**
 
    - Allow microphone access when prompted
 
    - Start recording and try out all the features!
+     
+4. ***Saving Recordings**
+   
+   - When you stop a recording, the app will ask you to enter a custom file name via an alert prompt.
+
+   - If you leave the prompt empty or cancel it, the recording will be saved with a system-generated name like Recording_1, Recording_2, etc.
+
+   - This helps you keep recordings organized and easily searchable later.
 
 
+**Happy Recording**
