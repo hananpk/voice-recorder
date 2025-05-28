@@ -18,5 +18,6 @@ It allows users to record their voice, save it with a custom name.
 - CSS3
 - JavaScript (Vanilla)
 - Web Audio API
+- Hawler.js
 - LocalStorage (for saving recording metadata)
 
