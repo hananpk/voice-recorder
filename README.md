@@ -43,7 +43,7 @@ It allows users to record their voice, save it with a custom name.
 
    - Start recording and try out all the features!
      
-4. ***Saving Recordings**
+4. **Saving Recordings**
    
    - When you stop a recording, the app will ask you to enter a custom file name via an alert prompt.
 
@@ -52,4 +52,4 @@ It allows users to record their voice, save it with a custom name.
    - This helps you keep recordings organized and easily searchable later.
 
 
-**Happy Recording**
+## Happy Recording!
