@@ -52,4 +52,4 @@ It allows users to record their voice, save it with a custom name.
    - This helps you keep recordings organized and easily searchable later.
 
 
-## Happy Recording!
+**Happy Recording!**
