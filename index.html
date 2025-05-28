@@ -8,13 +8,15 @@
   <link rel="stylesheet" href="./css/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <script src="https://kit.fontawesome.com/0edb635d7a.js" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.4/howler.core.min.js" integrity="sha512-d00Brs/+XQUUaO0Y9Uo8Vw63o7kS6ZcLM2P++17kALrI8oihAfL4pl1jQObeRBgv06j7xG0GHOhudAW0BdrycA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.4/howler.core.min.js"
+    integrity="sha512-d00Brs/+XQUUaO0Y9Uo8Vw63o7kS6ZcLM2P++17kALrI8oihAfL4pl1jQObeRBgv06j7xG0GHOhudAW0BdrycA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script ype="module" src="./js/script.js" defer></script>
 </head>
 
 <body>
   <main>
-    
+
     <div id="recordings">
       <div class="search-box">
         <div class="search-wrapper">
@@ -24,14 +26,12 @@
         <button id="ask-ai"><i class="fa-solid fa-head-side-virus"></i> Ask AI</button>
       </div>
       <div id="recordings-list">
-        <div class="recording-item">
-          <p class="recording-title">Recording Name (00:00)</p>
-          <audio controls></audio>
-          <button id="speed-toggle" class="speed-toggle">1x</button>
-          <button class="delete-button"></button>
-        </div>
+        <!-- injecting data from JS -->
+        <div class="recording-item"></div>
       </div>
     </div>
+
+    <!-- recording controls -->
     <div id="record-controls">
       <span class="expand"><i class="fa-solid fa-angle-up"></i></span>
       <div class="waveform-container">
@@ -40,8 +40,9 @@
       </div>
       <button id="record-button">Start</button>
     </div>
-    
+
   </main>
-  
+
 </body>
+
 </html>
